@@ -9,6 +9,7 @@ import connectDB from './config/mongodb.js';
 import authRouter from './routes/authRoutes.js';
 app.use(cors({credentials: true}));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
