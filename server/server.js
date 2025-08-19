@@ -7,7 +7,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 import connectDB from './config/mongodb.js';
 import authRouter from './routes/authRoutes.js';
-app.use(cors({credentials: true}));
+import userRouter from './routes/userRoutes.js';
+const allowedOrigins = ['http://localhost:5173'];
+app.use(cors({origin: allowedOrigins, credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -17,6 +19,8 @@ app.get('/', (req, res) => {
 });
 connectDB();
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
