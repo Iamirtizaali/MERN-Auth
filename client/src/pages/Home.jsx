@@ -1,6 +1,8 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Header from '../components/Header'
+import ResetPassword from './ResetPassword'
+import EmailVerify from './EmailVerify'
 
 const Home = () => {
   return (

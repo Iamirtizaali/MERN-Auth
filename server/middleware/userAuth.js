@@ -6,6 +6,7 @@ const userAuth = async (req, res, next) => {
     console.log("User token:", token);
     if (!token) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
+      next();
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded token payload:", decoded);

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const Login = () => {
     const navigate =useNavigate();
-    const { backendUrl, isLoggedIn, setIsLoggedIn, userData, setUserData } = React.useContext(AppContext);
+    const { backendUrl, isLoggedIn, setIsLoggedIn, userData, setUserData,getUserData } = React.useContext(AppContext);
     const [state,setState]=useState("Sign Up");
     const [name,setName]=useState("");
     const [email,setEmail]=useState("");
@@ -20,12 +20,11 @@ const Login = () => {
         try {
             axios.defaults.withCredentials = true; // Ensure cookies are sent with requests
             const response = await axios.post(url, { name, email, password });
-            console.log(response);
+            // console.log(response);
             if (response.data.success) {
-                console.log("helllottt");
-                const data = response.data;
+                // after successful login/register, refresh server user data
                 setIsLoggedIn(true);
-                setUserData(data);
+                try { await getUserData(); } catch (e) { /* ignore */ }
                 navigate("/");
             }
             else{
@@ -43,7 +42,7 @@ const Login = () => {
 return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400'>
      <img src={assets.logo} onClick={() => navigate('/')} alt="" className='w-28 sm:w-32 cursor-pointer absolute top-4 left-4' />
-     <div className='bg-pink-400 p-8 rounded-2xl shadow-md'>
+     <div className='bg-pink-400 p-8 rounded-2xl shadow-md w-md'>
             <h2 className='text-white font-bold text-xl text-center'>{state==="Sign Up"?"Create an Account":"Login to your Account"}</h2>
             <p className='text-white text-center mb-2'>
                     {state==="Sign Up"?"Create your Account":"Login to your Account"}

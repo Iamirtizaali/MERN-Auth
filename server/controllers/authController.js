@@ -84,8 +84,9 @@ export const logoutUser = async (req, res) => {
 
 export const sendVerifyOtp = async (req, res) => {
   try {
-    const { userId } = req.body;
-    console.log("sendVerifyOtp - userId candidates:", { bodyUserId: userId, queryUserId: req.query?.userId, paramsUserId: req.params?.userId });
+    // Accept userId from body/query/params or from authenticated middleware (req.userId)
+    const userId = req.body?.userId || req.query?.userId || req.params?.userId || req.userId || req.user?.id;
+    console.log("sendVerifyOtp - userId candidates:", { bodyUserId: req.body?.userId, queryUserId: req.query?.userId, paramsUserId: req.params?.userId, middlewareUserId: req.userId });
 
     if (!userId) {
       return res.status(400).json({ success: false, message: "User ID is required" });
@@ -162,7 +163,8 @@ export const verifyEmail = async (req, res) => {
 
 export const isUserAuthenticated = (req, res,) => {
 try {
-    return res.json({ success: true, message: "User is authenticated", user: req.user });
+  if (!req.user) return res.status(401).json({ success: false, message: 'Unauthorized' });
+  return res.json({ success: true, message: "User is authenticated", user: req.user });
   } catch (error) {
     console.error("Error checking user authentication:", error);
     return res.status(500).json({ success: false, message: "Internal server error" });
